@@ -44,11 +44,11 @@ patterns: [
     name: "variable.language.dm"
   }
   {
-    match: "\\b( \\? | (> | <)(=)? | \\. | : | /(=)? | ~ | \\+(\\+|=)? | -(-|=)? | \\*(\\*|=)? | % | >> | << | =(=)? | !(=)? || <> | & | && | \\^ | \\| | \\|\\| )\\b"
+    match: "\\b( \\? | (> | <)(=)? | \\. | : | /(=)? | ~ | \\+(\\+|=)? | -(-|=)? | \\*(\\*|=)? | % | >> | << | =(=)? | !(=)? | <> | & | && | \\^ | \\| | \\|\\| )\\b"
     name: "keyword.operator.dm"
   }
   {
-    match: "\\b([A-Z_]+)\\b"
+    match: "\\b([A-Z_][A-Z_0-9]*)\\b"
     name: "constant.language.dm"
   }
   {
@@ -87,41 +87,38 @@ patterns: [
     ]
   }
   {
-    begin: '''
-      (?x)
-              		^\\s*\\#\\s*(define)\\s+             # define
-              		((?<id>[a-zA-Z_][a-zA-Z0-9_]*))  # macro name
-              		(?:                              # and optionally:
-              		    (\\()                         # an open parenthesis
-              		        (
-              		            \\s* \\g<id> \\s*       # first argument
-              		            ((,) \\s* \\g<id> \\s*)*  # additional arguments
-              		            (?:\\.\\.\\.)?          # varargs ellipsis?
-              		        )
-              		    (\\))                         # a close parenthesis
-              		)?
-
-    '''
+    begin: """(?x)
+      ^\\s* ((\\#)\\s*define) \\s+     # define
+      ((?<id>[a-zA-Z_][a-zA-Z0-9_]*))  # macro name
+      (?:
+        (\\()
+          (
+            \\s* \\g<id> \\s*         # first argument
+            ((,) \\s* \\g<id> \\s*)*  # additional arguments
+            (?:\\.\\.\\.)?            # varargs ellipsis?
+          )
+        (\\))
+      )?
+    """
     beginCaptures:
       "1":
-        name: "keyword.control.import.define.dm"
+        'name': 'keyword.control.directive.define.dm'
       "2":
-        name: "entity.name.function.preprocessor.dm"
-      "4":
-        name: "punctuation.definition.parameters.dm"
+        'name': 'punctuation.definition.directive.dm'
+      "3":
+        'name': 'entity.name.function.preprocessor.dm'
       "5":
-        name: "variable.parameter.preprocessor.dm"
-      "7":
-        name: "punctuation.separator.parameters.dm"
+        'name': 'punctuation.definition.parameters.begin.dm'
+      "6":
+        'name': 'variable.parameter.preprocessor.dm'
       "8":
-        name: "punctuation.definition.parameters.dm"
-    end: "(?=(?://|/\\*))|$"
+        'name': 'punctuation.separator.parameters.dm'
+      "9":
+        'name': 'punctuation.definition.parameters.end.dm'
+
+    end: "(?=(?://|/\\*))|(?<!\\\\)(?=\\n)"
     name: "meta.preprocessor.macro.dm"
     patterns: [
-      {
-        match: "(?>\\\\\\s*\\n)"
-        name: "punctuation.separator.continuation.dm"
-      }
       {
         include: "$base"
       }
@@ -142,10 +139,7 @@ patterns: [
     ]
   }
   {
-    include: "#pragma-mark"
-  }
-  {
-    begin: "^\\s*#\\s*(define|defined|elif|else|if|ifdef|ifndef|line|pragma|include|undef)\\b"
+    begin: "^\\s*(#\\s*(elif|else|if|ifdef|ifndef|line|include|undef))\\b"
     captures:
       "1":
         name: "keyword.control.import.dm"
@@ -202,7 +196,7 @@ patterns: [
       }
     ]
   }
-]
+  ]
 repository:
   access:
     match: "\\.[a-zA-Z_][a-zA-Z_0-9]*\\b(?!\\s*\\()"
@@ -326,9 +320,6 @@ repository:
       {
         include: "#disabled"
       }
-      {
-        include: "#pragma-mark"
-      }
     ]
   parens:
     begin: "\\("
@@ -339,16 +330,6 @@ repository:
         include: "$base"
       }
     ]
-  "pragma-mark":
-    captures:
-      "1":
-        name: "meta.preprocessor.dm"
-      "2":
-        name: "keyword.control.import.pragma.dm"
-      "3":
-        name: "meta.toc-list.pragma-mark.dm"
-    match: "^\\s*(#\\s*(pragma\\s+mark)\\s+(.*))"
-    name: "meta.section"
   "preprocessor-rule-disabled":
     begin: "^\\s*(#(if)\\s+(0)\\b).*"
     captures:
@@ -381,9 +362,6 @@ repository:
         patterns: [
           {
             include: "#disabled"
-          }
-          {
-            include: "#pragma-mark"
           }
         ]
       }
@@ -421,9 +399,6 @@ repository:
           {
             include: "#disabled"
           }
-          {
-            include: "#pragma-mark"
-          }
         ]
       }
     ]
@@ -450,9 +425,6 @@ repository:
         patterns: [
           {
             include: "#disabled"
-          }
-          {
-            include: "#pragma-mark"
           }
         ]
       }
@@ -489,9 +461,6 @@ repository:
         patterns: [
           {
             include: "#disabled"
-          }
-          {
-            include: "#pragma-mark"
           }
         ]
       }
