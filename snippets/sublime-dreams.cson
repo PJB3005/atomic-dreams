@@ -1,0 +1,49 @@
+".source.dm, .source.dme":
+  "#ifndef … #define … #endif":
+    prefix: "def"
+    body: '''
+      #ifndef ${1/([A-Za-z0-9_]+).*/$1/}
+      #define ${1:SYMBOL} ${2:value}
+      #endif
+    '''
+".source.dm":
+  "Do While Loop":
+    prefix: "do"
+    body: '''
+      do
+      
+      	${0:/* code */}
+      while (${1:/* condition */});
+    '''
+  "For-in Loop":
+    prefix: "forin"
+    body: '''
+      for/(var ${2:i} in 1 to ${1:count})
+      
+      	${0:/* code */}
+      
+    '''
+  "For-in-step Loop":
+    prefix: "forinstep"
+    body: '''
+      for (var/${2:i} in 1 to ${1:count} step ${3:2})
+      
+      	${0:/* code */}
+      
+    '''
+  "For Loop":
+    prefix: "for"
+    body: '''
+      for/(var ${2:i} = 0; $2 < ${1:count}; ${3:++$2})
+      
+      	${0:/* code */}
+      
+    '''
+  "If Condition":
+    prefix: "if"
+    body: '''
+      if (${1:/* condition */})
+      
+      	${0:/* code */}
+      
+    '''
