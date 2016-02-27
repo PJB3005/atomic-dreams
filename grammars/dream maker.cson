@@ -51,6 +51,25 @@ patterns: [
     match: "\\b([A-Z_][A-Z_0-9]*)\\b"
     name: "constant.language.dm"
   }
+  { # Need a seperate one for {""} strings so {"thing " thing "} doesn't cause it to "leak"
+    begin: "{\""
+    beginCaptures:
+      "0":
+        name: "punctuation.definition.string.begin.dm"
+    end: "\"}"
+    endCaptures:
+      "0":
+        name: "punctuation.definition.string.end.dm"
+    name: "string.quoted.triple.dm" # Yes not technically triple quotes but it's the DM version of triple quotes in other languages.
+    patterns: [
+      {
+        include: "#string_escaped_char"
+      }
+      {
+        include: "#string_embedded_expression"
+      }
+    ]
+  }
   {
     begin: "\""
     beginCaptures:
@@ -125,7 +144,7 @@ patterns: [
     ]
   }
   {
-    begin: "^\\s*#\\s*(error|warning)\\b"
+    begin: "^\\s*(#\\s*(error|warning))\\b"
     captures:
       "1":
         name: "keyword.control.import.error.dm"
@@ -139,11 +158,18 @@ patterns: [
     ]
   }
   {
-    begin: "^\\s*(#\\s*(elif|else|if|ifdef|ifndef|line|include|undef))\\b"
-    captures:
+    begin: "^\\s*(?:((#)\\s*(?:elif|else|if|ifdef|ifndef))|((#)\\s*(undef)))\\b"
+    beginCaptures:
       "1":
-        name: "keyword.control.import.dm"
-    end: "(?=(?://|/\\*))|$"
+        name: "keyword.control.directive.conditional.dm"
+      "2":
+        name: "punctuation.definition.directive.dm"
+      "3":
+        name: "keyword.control.directive.undef.dm"
+      "4":
+        name: "punctuation.definition.directive.dm"
+
+    end: "(?=(?://|/\\*))|(?<!\\\\)(?=\\n)"
     name: "meta.preprocessor.dm"
     patterns: [
       {
@@ -516,7 +542,21 @@ repository:
   string_escaped_char:
     patterns: [
       {
-        match: "\\\\(\\\\|[\\[abefnprtv'\"?]|[0-3]\\d{,2}|[4-7]\\d?|x[a-fA-F0-9]{,2}|u[a-fA-F0-9]{,4}|U[a-fA-F0-9]{,8})"
+        match: """
+          (?x)
+          \\\\
+          (
+            h(?:er|im)self
+            |([tTsS]?he) # Weird regex to match The, the, She, she and he at once.
+            |He
+            |[Hh]is
+            |[aA]n?
+            |(?:im)?proper
+            |\\.\\.\\.
+            |(?:icon|ref|[Rr]oman)(?=\\[) # Macros which need a [] after them.
+            |[s<>"n\\n ]
+          )
+        """
         name: "constant.character.escape.dm"
       }
       {
