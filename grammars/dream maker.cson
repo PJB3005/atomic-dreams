@@ -28,11 +28,15 @@ patterns: [
 		name: "constant.numeric.dm"
 	}
 	{
-		match: "\\b(sleep|spawn|break|continue|do|else|for|goto|if|return|switch|while|del|new|to|in|step)\\b"
+		match: "\\b(sleep|spawn|break|continue|do|else|for|goto|if|return|switch|while)\\b"
 		name: "keyword.control.dm"
 	}
 	{
-		match: "\\b(var|arg|proc|verb)\\b"
+		match: "\\b(del|new)\\b"
+		name: "keyword.other.dm"
+	}
+	{
+		match: "\\b(var|proc|verb|datum|atom(/movable)?|obj|mob|turf|area|savefile|list|client|sound|image|database|matrix|regex|exception)\\b"
 		name: "storage.type.dm"
 	}
 	{
@@ -40,11 +44,11 @@ patterns: [
 		name: "storage.modifier.dm"
 	}
 	{
-		match: "\\b(usr|world|src|datum|atom(/movable)?|obj|mob|turf|area|savefile|list|client|sound|image)\\b"
+		match: "\\b(usr|world|src|args)\\b"
 		name: "variable.language.dm"
 	}
 	{
-		match: "\\b(\\s*\\?\\s*|\\s*(>\\s*|\\s*<)(=)?\\s*|\\s*\\.\\s*|\\s*:\\s*|\\s*/(=)?\\s*|\\s*~\\s*|\\s*\\+(\\+|=)?\\s*|\\s*-(-|=)?\\s*|\\s*\\*(\\*|=)?\\s*|\\s*%\\s*|\\s*>>\\s*|\\s*<<\\s*|\\s*=(=)?\\s*|\\s*!(=)?\\s*|\\s*<>\\s*|\\s*&\\s*|\\s*&&\\s*|\\s*\\^\\s*|\\s*\\|\\s*|\\s*\\|\\|\\s*)\\b"
+		match: "\\b(\\s*\\?\\s*|\\s*(>\\s*|\\s*<)(=)?\\s*|\\s*\\.\\s*|\\s*:\\s*|\\s*/(=)?\\s*|\\s*~\\s*|\\s*\\+(\\+|=)?\\s*|\\s*-(-|=)?\\s*|\\s*\\*(\\*|=)?\\s*|\\s*%\\s*|\\s*>>\\s*|\\s*<<\\s*|\\s*=(=)?\\s*|\\s*!(=)?\\s*|\\s*<>\\s*|\\s*&\\s*|\\s*&&\\s*|\\s*\\^\\s*|\\s*\\|\\s*|\\s*\\|\\|\\s*|\\s*to\\s*|\\s*in\\s*|\\s*step\\s*)\\b"
 		name: "keyword.operator.dm"
 	}
 	{
@@ -144,7 +148,7 @@ patterns: [
 		]
 	}
 	{
-		begin: "^\\s*(#\\s*(error|warning))\\b"
+		begin: "^\\s*(#\\s*(error|warn))\\b"
 		captures:
 			"1":
 				name: "keyword.control.import.error.dm"
