@@ -158,14 +158,14 @@ patterns: [
 		]
 	}
 	{
-		begin: "^\\s*(?:((#)\\s*(?:elif|else|if|ifdef|ifndef))|((#)\\s*(undef)))\\b"
+		begin: "^\\s*(?:((#)\\s*(?:elif|else|if|ifdef|ifndef))|((#)\\s*(undef|include)))\\b"
 		beginCaptures:
 			"1":
 				name: "keyword.control.directive.conditional.dm"
 			"2":
 				name: "punctuation.definition.directive.dm"
 			"3":
-				name: "keyword.control.directive.undef.dm"
+				name: "keyword.control.directive.$5.dm"
 			"4":
 				name: "punctuation.definition.directive.dm"
 
@@ -501,13 +501,14 @@ repository:
 			}
 		]
 	"preprocessor-rule-other":
-		begin: "^\\s*(#\\s*(if(n?def)?)\\b.*?(?:(?=(?://|/\\*))|$))"
+		begin: "^\\s*((#\\s*(if(n?def)?))\\b.*?(?:(?=(?://|/\\*))|$))"
 		captures:
 			"1":
 				name: "meta.preprocessor.dm"
 			"2":
 				name: "keyword.control.import.dm"
-		end: "^\\s*(#\\s*(endif)\\b).*$"
+
+		end: "^\\s*((#\\s*(endif))\\b).*$"
 		patterns: [
 			{
 				include: "$base"
