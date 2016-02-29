@@ -551,7 +551,7 @@ repository:
 					(?x)
 					\\\\
 					(
-						h(?:er|im)self
+						h(?:(?:er|im)self|ers|im)
 						|([tTsS]?he) # Weird regex to match The, the, She, she and he at once.
 						|He
 						|[Hh]is
