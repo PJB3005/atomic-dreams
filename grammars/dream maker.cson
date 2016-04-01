@@ -1,4 +1,4 @@
-fileTypes: [
+"fileTypes": [ # First key is quoted due to https://github.com/github/linguist/issues/2924
 	"dm"
 	"dme"
 ]
