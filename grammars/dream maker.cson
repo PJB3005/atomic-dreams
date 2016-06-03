@@ -77,6 +77,10 @@ patterns: [
 		match: "\\b([A-Z_][A-Z_0-9]*)\\b"
 		name: "constant.language.dm"
 	}
+	{
+		match: "\\bnull\\b"
+		name: "constant.language.dm"
+	}
 	{ # Need a seperate one for {""} strings so {"thing " thing "} doesn't cause it to "leak"
 		begin: "{\""
 		beginCaptures:
@@ -143,7 +147,7 @@ patterns: [
 						(?:\\.\\.\\.)?            # varargs ellipsis?
 					)
 				(\\))
-			)?
+			)
 		"""
 		beginCaptures:
 			"1":
@@ -160,6 +164,27 @@ patterns: [
 				'name': 'punctuation.separator.parameters.dm'
 			"9":
 				'name': 'punctuation.definition.parameters.end.dm'
+
+		end: "(?=(?://|/\\*))|(?<!\\\\)(?=\\n)"
+		name: "meta.preprocessor.macro.dm"
+		patterns: [
+			{
+				include: "$base"
+			}
+		]
+	}
+	{
+		begin: """(?x)
+			^\\s* ((\\#)\\s*define) \\s+     # define
+			((?<id>[a-zA-Z_][a-zA-Z0-9_]*))  # macro name
+		"""
+		beginCaptures:
+			"1":
+				'name': 'keyword.control.directive.define.dm'
+			"2":
+				'name': 'punctuation.definition.directive.dm'
+			"3":
+				'name': 'variable.other.preprocessor.dm'
 
 		end: "(?=(?://|/\\*))|(?<!\\\\)(?=\\n)"
 		name: "meta.preprocessor.macro.dm"
@@ -317,6 +342,11 @@ repository:
 						name: "punctuation.definition.comment.dm"
 				end: "\\*/"
 				name: "comment.block.dm"
+				patterns: [
+						{
+							include: "#comments"
+						}
+					]
 			}
 			{
 				match: "\\*/.*\\n"
