@@ -24,6 +24,28 @@ patterns: [
 		include: "#comments"
 	}
 	{
+		match: '''(?x)
+		(var)[\\/ ]
+		(?:(static|global|tmp|const)\\/)?
+		(?:(datum|atom(?:\\/movable)?|obj|mob|turf|area|savefile|list|client|sound|image|database|matrix|regex|exception)\\/)?
+		(?:
+			([a-zA-Z0-9_\\-$]*)\\/
+		)*
+
+		([A-Za-z0-9]*)\\b
+		'''
+		name: "meta.initialization.dm"
+		captures:
+			"1":
+				name: "storage.type.dm"
+			"2":
+				name: "storage.modifier.dm"
+			"3":
+				name: "storage.type.dm"
+			"5":
+				name: "variable.other.dm"
+	}
+	{
 		match: "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b"
 		name: "constant.numeric.dm"
 	}
@@ -36,7 +58,7 @@ patterns: [
 		name: "keyword.other.dm"
 	}
 	{
-		match: "\\b(var|proc|verb|datum|atom(/movable)?|obj|mob|turf|area|savefile|list|client|sound|image|database|matrix|regex|exception)\\b"
+		match: "\\b(proc|verb|datum|atom(/movable)?|obj|mob|turf|area|savefile|list|client|sound|image|database|matrix|regex|exception)\\b"
 		name: "storage.type.dm"
 	}
 	{
@@ -48,7 +70,7 @@ patterns: [
 		name: "variable.language.dm"
 	}
 	{
-		match: "\\b(\\s*\\?\\s*|\\s*(>\\s*|\\s*<)(=)?\\s*|\\s*\\.\\s*|\\s*:\\s*|\\s*/(=)?\\s*|\\s*~\\s*|\\s*\\+(\\+|=)?\\s*|\\s*-(-|=)?\\s*|\\s*\\*(\\*|=)?\\s*|\\s*%\\s*|\\s*>>\\s*|\\s*<<\\s*|\\s*=(=)?\\s*|\\s*!(=)?\\s*|\\s*<>\\s*|\\s*&\\s*|\\s*&&\\s*|\\s*\\^\\s*|\\s*\\|\\s*|\\s*\\|\\|\\s*|\\s*to\\s*|\\s*in\\s*|\\s*step\\s*)\\b"
+		match: "(\\?|(>|<)(=)?|\\.|:|/(=)?|~|\\+(\\+|=)?|-(-|=)?|\\*(\\*|=)?|%|>>|<<|=(=)?|!(=)?|<>|&|&&|\\^|\\||\\|\\||\\bto\\b|\\bin\\b|\\bstep\\b)"
 		name: "keyword.operator.dm"
 	}
 	{
@@ -226,7 +248,8 @@ patterns: [
 			}
 		]
 	}
-	]
+
+]
 repository:
 	access:
 		match: "\\.[a-zA-Z_][a-zA-Z_0-9]*\\b(?!\\s*\\()"
@@ -270,27 +293,6 @@ repository:
 								 \\s*(\\()
 				'''
 				name: "meta.function-call.dm"
-			}
-			{
-				captures:
-					"1":
-						name: "variable.other.dm"
-					"2":
-						name: "punctuation.definition.parameters.dm"
-				match: '''
-					(?x)
-												(?x)
-								(?:
-										 (?: (?= \\s )           (?<!else|new|return) (?<=\\w)\\s+      #  or word + space before name
-										 )
-								)
-								(
-									(?: [A-Za-z_][A-Za-z0-9_]*+ | :: )++    |              # actual name
-									(?: (?<=operator) (?: [-*&<>=+!]+ | \\(\\) | \\[\\] ) )?  # if it is a C++ operator
-								)
-								 \\s*(\\()
-				'''
-				name: "meta.initialization.dm"
 			}
 			{
 				include: "#block"
