@@ -561,7 +561,7 @@ repository:
 						|(?:im)?proper
 						|\\.\\.\\.
 						|(?:icon|ref|[Rr]oman)(?=\\[) # Macros which need a [] after them.
-						|[s<>"n\\n ]
+						|[s<>"n\\n \\[]
 					)
 				"""
 				name: "constant.character.escape.dm"
