@@ -32,7 +32,7 @@ patterns: [
 			([a-zA-Z0-9_\\-$]*)\\/
 		)*
 
-		([A-Za-z0-9]*)\\b
+		([A-Za-z0-9_$]*)\\b
 		'''
 		name: "meta.initialization.dm"
 		captures:
