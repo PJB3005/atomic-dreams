@@ -25,7 +25,7 @@ patterns: [
 	}
 	{
 		match: '''(?x)
-		(var)[\\/ ]
+		(?:\\b(var))[\\/ ]
 		(?:(static|global|tmp|const)\\/)?
 		(?:(datum|atom(?:\\/movable)?|obj|mob|turf|area|savefile|list|client|sound|image|database|matrix|regex|exception)\\/)?
 		(?:
