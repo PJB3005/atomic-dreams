@@ -25,7 +25,7 @@ patterns: [
 	}
 	{
 		match: '''(?x)
-		(?:^|[\\s\\t\\(])(var)[\\/ ]
+		(?:\\b(var))[\\/ ]
 		(?:(static|global|tmp|const)\\/)?
 		(?:(datum|atom(?:\\/movable)?|obj|mob|turf|area|savefile|list|client|sound|image|database|matrix|regex|exception)\\/)?
 		(?:
@@ -40,9 +40,9 @@ patterns: [
 				name: "storage.type.dm"
 			"2":
 				name: "storage.modifier.dm"
-			"4":
+			"3":
 				name: "storage.type.dm"
-			"6":
+			"5":
 				name: "variable.other.dm"
 	}
 	{
